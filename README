@@ -1,0 +1,8 @@
+This project creates the ota package for the Edge Node Manager for Lwm2m update
+
+Pre-requisites:-
+1) Directory firmware - Put your ebl file in this folder
+2) File VERSION - Update the version in this file or set the environment variable VERSION
+
+Build:-
+make archive
