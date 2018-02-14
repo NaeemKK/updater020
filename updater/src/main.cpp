@@ -34,7 +34,24 @@ int main(int argc, char *argv[])
 		std::string firmware    = package["filename"];
 		std::string app         = package["application"];
 		std::string pkg_version = package["version"];
-
+		std::string pkg_action  = package["action"];		
+		int version_status = pkg_version.compare(argv[2]);
+		std::cout <<"version status"<<version_status<<std::endl;	
+		if (version_status == 0 && pkg_action == "s")
+		{
+			std::cout << "same version to be updated"<<std::endl;
+		}else if (version_status == -1 && pkg_action == "d")
+		{
+			std::cout << "downgraded version to be applied"<<std::endl;			
+		}else if (version_status == 1 && pkg_action == "u")
+		{
+			std::cout << "upraded version to be applied"<<std::endl;			
+		}else
+		{
+			std::cout << "Package Version Error"<<std::endl;
+			return ERROR_UPDATER_SAME_FIRMWARE;	
+		}		
+		
 		std::cout << "Firmware is " << firmware << std::endl;
 
 

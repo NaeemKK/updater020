@@ -1,4 +1,7 @@
 #!/bin/bash
+
+ERROR_UPDATER_DEVICE_COMMUNICATION=4
+
 if [ -f "log1" ]
 then
 	rm log1
@@ -29,7 +32,7 @@ output=$(cat <&${COPROC[0]})
 if [ -z "$(echo "$output" | grep "Device $1")" ];then
         echo "Device not Found"
         #send error code RET
-		
+	RET=$ERROR_UPDATER_DEVICE_COMMUNICATION	
 	exit $RET
 else
         echo "Device found"
@@ -59,19 +62,19 @@ else
         echo "$output" > log2
 	if [ ! -z "$(cat log2 | grep "No device connected")" ];then
 		echo "Device cannot be connected"
-		## return error code RET=
+		RET=$ERROR_UPDATER_DEVICE_COMMUNICATION
 		exit $RET
 	fi
 	version_str="Attribute $fr_attr Value:" ##  strings of version number
 	fversion_strings="$(cat log2 | grep "$version_str")" #filter only version strings
 	fversion_strings="$(echo "$fversion_strings" | awk -F: '{print $NF}' | tr -d [:blank:])" 
-	echo -e "version is : \n$fversion_strings"
-	version="$(get_version $fversion_strings)"
+	version="$(get_version "$fversion_strings")"
+	echo "version is $version" 
 fi
 
 
 
-./updater-app "$1 $version"
+./updater-app "$1" "$version"
 RET=$?
 exit $RET
 
