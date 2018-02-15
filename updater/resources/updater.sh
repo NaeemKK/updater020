@@ -27,7 +27,10 @@ function get_version()
 }
 
 coproc bluetoothctl
-echo -e "info "$1"\nexit" >&${COPROC[1]}
+echo -e "scan on" >&${COPROC[1]}
+sleep 2
+echo -e "scan off"\nexit" >&${COPROC[1]}
+sleep 2
 output=$(cat <&${COPROC[0]})
 if [ -z "$(echo "$output" | grep "Device $1")" ];then
         echo "Device not Found"
@@ -37,7 +40,11 @@ if [ -z "$(echo "$output" | grep "Device $1")" ];then
 else
         echo "Device found"
         coproc bluetoothctl
-        echo -e "connect "$1"">&${COPROC[1]}
+	echo -e "scan on">&${COPROC[1]}
+        sleep 2
+	echo -e "scan off">&${COPROC[1]}
+        sleep 2
+	echo -e "connect "$1"">&${COPROC[1]}
         sleep 4
         echo -e "list-attributes">&${COPROC[1]}
         sleep 2
@@ -55,8 +62,6 @@ else
         echo -e "select-attribute $fr_attr">&${COPROC[1]}
         sleep 1
         echo -e "read">&${COPROC[1]}
-        echo -e "disconnect">&${COPROC[1]}
-        sleep 4
         echo -e "exit">&${COPROC[1]}
         output=$(cat <&${COPROC[0]})
         echo "$output" > log2

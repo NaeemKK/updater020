@@ -3,5 +3,5 @@
 	"version": "1.0.3",
 	"filename": "artik-edge-node.ebl",
 	"sha256sum": "e2b6ce9a0b5eac0963adc46327e1a480b0532a2d3342614e73de599877a5cf70",
-	"mac":"00:0B:57:0B:DF:D1"	
+	"action": "u"
 }
