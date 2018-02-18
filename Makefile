@@ -1,4 +1,4 @@
-CXX     ?= g++
+CXX     = g++
 FILENAME := $(shell cd firmware ; ls *.ebl)
 SHA256SUM := $(shell sha256sum firmware/*.ebl | awk {'print $$1'})
 PACKAGE_JSON := "firmware/package.json"
@@ -13,7 +13,7 @@ archive: updater-app
 
 updater-app: updater/src/main.cpp
 	mkdir -p output
-	g++ -std=c++11 updater/src/main.cpp -o output/updater-app
+	$(CXX) -std=c++11 updater/src/main.cpp -o output/updater-app
 
 .PHONY : clean
 clean :

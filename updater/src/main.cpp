@@ -40,10 +40,10 @@ int main(int argc, char *argv[])
 		if (version_status == 0 && pkg_action == "s")
 		{
 			std::cout << "same version to be updated"<<std::endl;
-		}else if (version_status == -1 && pkg_action == "d")
+		}else if (version_status < -0 && pkg_action == "d")
 		{
 			std::cout << "downgraded version to be applied"<<std::endl;			
-		}else if (version_status == 1 && pkg_action == "u")
+		}else if (version_status > 0 && pkg_action == "u")
 		{
 			std::cout << "upraded version to be applied"<<std::endl;			
 		}else

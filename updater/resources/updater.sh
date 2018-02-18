@@ -27,11 +27,14 @@ function get_version()
 }
 
 coproc bluetoothctl
-echo -e "scan on" >&${COPROC[1]}
+echo -e "scan on">&${COPROC[1]}
 sleep 2
-echo -e "scan off"\nexit" >&${COPROC[1]}
+echo -e "scan off">&${COPROC[1]}
 sleep 2
+echo -e "exit">&${COPROC[1]}
+
 output=$(cat <&${COPROC[0]})
+
 if [ -z "$(echo "$output" | grep "Device $1")" ];then
         echo "Device not Found"
         #send error code RET
@@ -56,12 +59,17 @@ else
         fr_attr="$(sed -n '/Firmware Revision String/{x;p;d;}; x' log1 | sed -n 2p | tr -d [:blank:])" ## get attribute of firmware revision
         echo "$fr_attr"
         coproc bluetoothctl
+	echo -e "scan on">&${COPROC[1]}
+        sleep 2
+	echo -e "scan off">&${COPROC[1]}
+        sleep 2
         echo -e "connect "$1"">&${COPROC[1]}
         sleep 4
         #echo -e "list-attributes">&${COPROC[1]}
         echo -e "select-attribute $fr_attr">&${COPROC[1]}
         sleep 1
         echo -e "read">&${COPROC[1]}
+	sleep 3
         echo -e "exit">&${COPROC[1]}
         output=$(cat <&${COPROC[0]})
         echo "$output" > log2
@@ -74,12 +82,14 @@ else
 	fversion_strings="$(cat log2 | grep "$version_str")" #filter only version strings
 	fversion_strings="$(echo "$fversion_strings" | awk -F: '{print $NF}' | tr -d [:blank:])" 
 	version="$(get_version "$fversion_strings")"
-	echo "version is $version" 
+	echo "version is $version"
+	
 fi
 
-
-
 ./updater-app "$1" "$version"
+coproc bluetoothctl
+echo -e "disconnect">&${COPROC[1]}
+sleep 2
 RET=$?
 exit $RET
 
