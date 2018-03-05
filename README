@@ -1,0 +1,35 @@
+This project creates the ota package for the Artik 520/710 for Lwm2m update
+
+Pre-requisites:-
+1) Directory packages - Put all your rpm packages in this folder
+2) packages.json - JSON manifest of the following format:
+{
+    "application" : "<application name>",
+    "version" : "<version of the application>",
+    "updatefirst" : <true if 'dnf update' should be run prior to installing the package, flase otherwise>,
+    "options" : "<dnf options, only --allowerasing, --nogpgcheck and --best are supported>",
+    "local_dependencies" : [
+        {
+            "name" : "<filename of the RPM to install>",
+            "operation" : "<optional: dnf operation, only install, reinstall and downgrade are supported, by default: install>"
+        }
+    ],
+    "packages" :
+    [
+        {
+            "local_dependencies" : [
+                {
+                    "name" : "<filename of the RPM to install>",
+                    "operation" : "optional: dnf operation, only install, reinstall and downgrade are supported, by default: inherit from package"
+                }
+            ],
+            "name" : "<filename or pkg_spec of the RPM to install>",
+            "operation" : "<optional: dnf operation, only install, reinstall and downgrade are supported, by default: install>"
+        },
+    ]
+
+}
+
+
+Build:-
+make archive

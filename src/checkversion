@@ -1,0 +1,27 @@
+#!/bin/bash
+
+SAME_VERSION=3
+DIFFERENT_VERSION=4
+
+current_version=`uname -r`
+
+if [ "$current_version" = "$1"  ];
+then
+	"ISSUE Same kernel Version"
+	ret=$SAME_VERSION
+else
+	if [ -e "/root/failed" ];
+	then
+		rm /root/failed
+	fi
+	if [ -e "/root/new" ];
+	then
+		rm /root/new
+	fi	 
+	ret=$DIFFERENT_VERSION
+fi
+## start application passing ret value
+
+exit 0
+
+
