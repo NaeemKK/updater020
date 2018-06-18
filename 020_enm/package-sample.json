@@ -1,0 +1,6 @@
+{
+	"application": "client",
+	"version": "VERSION",
+	"filename": "FILENAME",
+	"sha256sum": "SHA256SUM"
+}
