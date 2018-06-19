@@ -1,5 +1,6 @@
 {
 	"application": "client",
+	"uuid": "00002a26-0000-1000-8000-00805f9b34fb",
 	"version": "0.0.7",
 	"filename": "full.gbl",
 	"sha256sum": "b3994026ca69d288a025c72fa1b552088d74a2b1d08c5a94aa4a87cdf4679182"

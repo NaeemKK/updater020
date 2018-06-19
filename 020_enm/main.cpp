@@ -75,6 +75,8 @@ int main(int argc, char *argv[])
 		host.erase(std::remove(host.begin(), host.end(), '['), host.end());
 		host.erase(std::remove(host.begin(), host.end(), ']'), host.end());
 		std::cout << "Device MAC Address is " << host << std::endl;
+		std::string uuid = device["uuid"];
+		std::cout << "uuid is " << uuid << std::endl;
 		/* Launch the TFTP App program */
 		// Run the firmware updater
 		std::string cmd = "./" + app + " -f " + firmware + " -a  "  + host + " -v " + pkg_version + " -u " + ver_uuid + " > firmwareupdate.log";
@@ -83,41 +85,28 @@ int main(int argc, char *argv[])
 
 		/* Verify result */
 		try {
-			
 			std::ifstream ifs("firmwareupdate.log");
 			std::stringstream buffer;
 			buffer << ifs.rdbuf();
 			std::string firmwareUpdateLogs = buffer.str();
-			bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Image Replaced")));
-			ifs.close();	
+			bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Image Verified")));
+			bool reboot_stat=false;
 			if(firmwareUpdateSuccess == 1)
 			{
-				std::cout << "Successfully Rebooted" << std::endl;
-				return UPDATER_SUCCESS; 	
-			}
-			else
-			{
-				std::system("cp firmwareupdate.log error.log");				
-				std::cout << "Re-launching command [" << cmd << "]" << std::endl;
-				std::system(cmd.c_str());
-				std::ifstream ifs("firmwareupdate.log");
-				std::stringstream buffer;
-				buffer << ifs.rdbuf();
-				std::string firmwareUpdateLogs = buffer.str();
-				bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Image Replaced")));
-				if(firmwareUpdateSuccess == 1)
-				{
-					std::cout << "Successfully Rebooted" << std::endl;
-					return UPDATER_SUCCESS; 
-				}
-				else
-				{
-					std::cout << "Failed to Reboot" << std::endl;
-					return ERROR_UPDATER_DEVICE_COMMUNICATION;
-				}
-				
+				std::string reboot_cmd = "python enm_dev_reboot.py " + uuid;
+				reboot_stat=true;
+				//reboot_stat = std::system(reboot_cmd.c_str()); 	
 			}
 
+			if(reboot_stat == true)
+			{	
+				std::cout << "Successfully Rebooted" << std::endl;
+				return UPDATER_SUCCESS; 
+			}else
+			{
+				std::cout << "Failed to Reboot" << std::endl << "returned value" << reboot_stat << std::endl;
+				return ERROR_UPDATER_DEVICE_COMMUNICATION;
+			}
 
 		} catch (std::exception& e) {
 			std::cerr << " Result Exception "  << e.what();
