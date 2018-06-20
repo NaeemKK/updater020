@@ -1,5 +1,5 @@
 #!/bin/bash
 
-./updater-app
+./updater-app &
 RET=$?
 exit $RET

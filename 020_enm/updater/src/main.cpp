@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 			std::stringstream buffer;
 			buffer << ifs.rdbuf();
 			std::string firmwareUpdateLogs = buffer.str();
-			bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Image Replaced")));
+			bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Sent Reboot POST request")));
 			ifs.close();	
 			if(firmwareUpdateSuccess == 1)
 			{
@@ -104,7 +104,7 @@ int main(int argc, char *argv[])
 				std::stringstream buffer;
 				buffer << ifs.rdbuf();
 				std::string firmwareUpdateLogs = buffer.str();
-				bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Image Replaced")));
+				bool firmwareUpdateSuccess = (std::string::npos != (firmwareUpdateLogs.find("Sent Reboot POST request")));
 				if(firmwareUpdateSuccess == 1)
 				{
 					std::cout << "Successfully Rebooted" << std::endl;
