@@ -1,0 +1,4 @@
+{
+    "type": "package",
+    "command": "dnf install update" 
+}

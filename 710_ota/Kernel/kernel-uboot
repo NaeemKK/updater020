@@ -1,0 +1,2 @@
+ext4write mmc 0:7 0x48000000 /root/attempted 1 0
+
