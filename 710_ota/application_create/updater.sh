@@ -1,35 +1,47 @@
 #!/bin/bash
 set -x
-ERROR_OCCURED=1
-CHECK_STAT_AT_REBOOT=2
-	
+ERROR_OCCURED=-1
+SUCCESS=0	
 type=`jq '.type' package.json | sed -e 's/^"//' -e 's/"$//'`
 
 if [ "$type" = "kernel" ]
 then
 	version=`jq '.version' package.json | sed -e 's/^"//' -e 's/"$//'`
-	if [ -e "uImage" ]
+	if [ -e "zImage" ]
 	then
-		if [  -e "/root/failed" ];
-		then
-			mv ./uImage /boot/
-			rm /root/failed
+		echo "Remounting /boot Read/Write"			
+		mount -o remount,rw /boot && mount -o remount,rw /lib/modules
+		if[ $? -eq 0 ]
+		then			
+			if [  -e "/root/failed" ];
+			then
+				cp -f ./zImage /boot/
+				rm /root/failed
+				sync
+			else
+				cp -f /boot/uImage /boot/uImage1
+				cp -f ./uImage /boot/
+				sync
+			fi
+			echo "Remounting /boot Read only"
+			mount -o remount,rw /boot
+			mount -o remount,rw /lib/modules
+			echo "Successfully copied new Image"
+			ret=$SUCESS		
 		else
-			cp /boot/uImage /boot/uImage1
-			mv ./uImage /boot/
-			sync
+			ret=$ERROR
+			echo "Cannot remount /boot"			
 		fi
 		## at bootup check version of kernel for upgrade status
-		gawk -i inplace -F" " -vOFS=" "  '$1=="check_version"{$2=$version}1;' ~/.bashrc		
-		ret=$CHECK_STAT_AT_REBOOT	
+		#gawk -i inplace -F" " -vOFS=" "  '$1=="check_version"{$2=$version}1;' ~/.bashrc		
 	else
 		echo "missing uImage"
-		ret=$ERROR_OCCURED
+		ret=$ERROR
 	fi
 elif [ "$type" = "package" ]
 then
 	echo "package"
-	cmd=`jq '.command' package.json | sed -e 's/^"//' -e 's/"$//'`
+	cmd=`jq '.command' package.json`
 	$cmd
 	ret=$?
 elif [ "$type" = "application" ]

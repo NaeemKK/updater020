@@ -1,0 +1,13 @@
+#!/bin/bash
+
+### ./bashrc changes
+
+if [ -e /root/failed ]
+then
+	echo "Previous Failed Kernel OTA update attempt detected."
+	echo"Send new one becuase old is being used"
+else
+	echo "Cleanup OTA stuff"
+	rm /root/new > /dev/null
+	rm /root/attempted > /new/null
+fi

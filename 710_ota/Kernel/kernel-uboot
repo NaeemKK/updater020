@@ -1,2 +1,18 @@
-ext4write mmc 0:7 0x48000000 /root/attempted 1 0
-
+setenv check_kernel 'setexpr res 0;setexpr new_res 0;setexpr attempt_res 0
+ext4load mmc 0:7 0x48000000 /root/new && setexpr new_res 1
+ext4load mmc 0:7 0x48000000 /root/attempted && setexpr attempt_res 1
+test $new_res -eq 1 -a $attempt_res -eq 1 && setexpr res 1
+if test $res -eq 1
+then
+	ext4write mmc 0:7 0x48000000 /root/failed 0 0
+	echo "load old kernel"
+	setenv kernel_file zImage_1
+elif test $new_res -eq 1
+then
+	ext4write mmc 0:7 0x48000000 /root/attempted 0 0
+	echo "load new image"
+	setenv kernel_file zImage
+else
+	echo "normal boot"
+	setenv kernel_file zImage
+fi'
