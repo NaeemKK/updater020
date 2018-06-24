@@ -16,3 +16,40 @@ else
 	echo "normal boot"
 	setenv kernel_file zImage
 fi'
+
+setenv load_fdt '
+    if test -z "$fdtfile"; then
+        loop=$board_rev
+        number=$board_rev:
+        success=0
+        until test $loop -eq 0 || test $success -ne 0; do
+            if test $loop -lt 10; then
+                number=0$loop
+            else
+                number=$loop
+            fi
+                        if test $res -eq 1
+                        then
+                                ext4size mmc $rootdev:$bootpart s5p4418-artik${model_id}-raptor-rev${number}_1.dtb && setexpr success 1
+            else
+                                ext4size mmc $rootdev:$bootpart s5p4418-artik${model_id}-raptor-rev${number}.dtb && setexpr success 1
+                        fi
+                        setexpr loop $loop - 1
+        done
+        if test $success -eq 0; then
+            ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-artik530-raptor-rev00.dtb
+        else
+                        if test $res -eq 1
+                        then
+                                echo "load old fdt file"
+                                ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-artik${model_id}-raptor-rev${number}_1.dtb
+                        else
+                                ext4load mmc $rootdev:$bootpart $fdtaddr s5p4418-artik${model_id}-raptor-rev${number}.dtb
+                        fi
+        fi
+    else
+        ext4load mmc $rootdev:$bootpart $fdtaddr $fdtfile
+    fi
+    setenv success
+    setenv number
+    setenv loop'

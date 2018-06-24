@@ -4,7 +4,7 @@ read -p "Enter Package Name without extension i.e. [.tar.xz] : " package_name
 read -p "Enter Version Number : " version_number
 echo ""
 echo "[------------- Creating Package -------------]"
-rm package.json > /dev/null
+rm package.json 2> /dev/null
 jq -n --arg package_name "$package_name" '{package_name: $package_name}' > package.json
 if [ $? -ne 0 ]
 then

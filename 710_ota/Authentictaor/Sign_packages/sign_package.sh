@@ -5,6 +5,13 @@ then
 	echo "Enter Package Name as an argument"
 	exit -1
 fi
+
+if [ ! -e $1 ]
+then
+	echo "No such package found"
+	exit -1
+fi
+
 	
 echo ""
 echo "[------------- Creating Digest and Signature of OTA Package--------------]"
@@ -30,6 +37,6 @@ echo "[------------- Success --------------]"
 echo ""
 
 echo "Cleaning files"
-rm  $1.sha256 > /dev/null
+rm  $1.sha256 2> /dev/null
 
 echo "Now $1.sha256.base64 can be sent"

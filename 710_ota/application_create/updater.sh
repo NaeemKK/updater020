@@ -12,22 +12,41 @@ then
 		echo "Remounting /boot Read/Write"			
 		mount -o remount,rw /boot && mount -o remount,rw /lib/modules
 		if[ $? -eq 0 ]
-		then			
-			if [  -e "/root/failed" ];
-			then
-				cp -f ./zImage /boot/
-				rm /root/failed
-				sync
+		then
+			umount /mnt 2> /dev/null
+			mount -o loop modules.img /mnt
+			if [ $? -eq 0]
+			then				
+				cp -rf /mnt/$version /lib/modules/
+				if [$? -eq 0]
+				then
+					if [  -e "/root/failed" ];
+					then
+						cp -f ./zImage /boot/
+						cp -f s5p4418-artik530-raptor-rev03.dtb /boot/
+						rm /root/failed
+						sync
+					else
+						cp -f /boot/zImage /boot/zImage_1
+						cp -f ./zImage /boot/
+						cp -f /boot/s5p4418-artik530-raptor-rev03.dtb /boot/s5p4418-artik530-raptor-rev03_1.dtb
+						cp s5p4418-artik530-raptor-rev03.dtb /boot/
+						sync
+					fi
+					echo "Remounting /boot Read only"
+					mount -o remount,rw /boot
+					mount -o remount,rw /lib/modules
+					umount /mnt
+					echo "Successfully copied new Image"
+					ret=$SUCESS
+				else
+					echo "Could not copy Kernel modules from /mnt"
+					ret=$ERROR
+				fi		
 			else
-				cp -f /boot/uImage /boot/uImage1
-				cp -f ./uImage /boot/
-				sync
-			fi
-			echo "Remounting /boot Read only"
-			mount -o remount,rw /boot
-			mount -o remount,rw /lib/modules
-			echo "Successfully copied new Image"
-			ret=$SUCESS		
+				echo "Cannot mount modules.img"
+				ret=$ERROR
+			fi				
 		else
 			ret=$ERROR
 			echo "Cannot remount /boot"			

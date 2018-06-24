@@ -33,7 +33,7 @@ echo "[---------------- Success ----------------]"
 echo ""
 echo ""
 echo "[---------------- Cleaning ---------------]"
-rm crt_sig_req ca.srl > /dev/null
+rm crt_sig_req.csr ca.srl 2> /dev/null
 echo ""
 echo "Now place ca.crt on each Gateway device. After placing it, you can sign a package with your sign_in.key and send it to the device along with sign_in.crt."
 
