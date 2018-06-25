@@ -87,8 +87,8 @@ echo "$package_name.sha256.base64 Created"
 echo ""
 echo "[------------- Creating Package to be uploaded to the cloud --------------]"
 echo ""
-read -p "Enter Package Name without extension i.e. [.tar.xz] : " cloud_package_name
-read -p "Enter Version Number : " version_number
+cloud_package_name=`echo $package_name | sed 's/.tar.xz*//'` 
+read -p "Enter Version Number for package : " version_number
 echo ""
 echo "[------------- Creating Package -------------]"
 echo ""
@@ -100,7 +100,7 @@ then
 fi
 		
 rm package.json 2> /dev/null
-jq -n --arg package_name "$package_name" '{package_name: $package_name}' > package.json
+jq -n --arg cloud_package_name "$cloud_package_name" '{package_name: $cloud_package_name}' > package.json
 if [ $? -ne 0 ]
 then
 	echo "Failed to create package.json"
@@ -108,7 +108,7 @@ else
 	echo "package.json successfully created"	
 fi	
 
-tar -cJf "$cloud_package_name"_"$version_number".tar.xz $package_name.tar.xz.sha256.base64 updater.sh sign_in.crt package.json $package_name.tar.xz
+tar -cJf "$cloud_package_name"_"$version_number".tar.xz $cloud_package_name.tar.xz.sha256.base64 updater.sh sign_in.crt package.json $cloud_package_name.tar.xz
 
 if [ $? -ne 0 ]
 then
@@ -117,6 +117,6 @@ then
 fi
 	
 echo ""
-echo "[------------- Upload the "$package_name"_"$version_number".tar.xz to cloud -------------]"
+echo "[------------- Upload the "$cloud_package_name"_"$version_number".tar.xz to cloud -------------]"
 echo ""
 
