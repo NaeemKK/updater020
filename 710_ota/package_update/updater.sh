@@ -11,7 +11,7 @@ then
 	then
 		echo "Remounting /boot Read/Write"			
 		mount -o remount,rw /boot && mount -o remount,rw /lib/modules
-		if[ $? -eq 0 ]
+		if [ $? -eq 0 ]
 		then
 			umount /mnt 2> /dev/null
 			mount -o loop modules.img /mnt
