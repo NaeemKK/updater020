@@ -3,9 +3,10 @@ set -x
 package_name=`jq '.package_name' package.json | sed -e 's/^"//' -e 's/"$//'`
 if [ -e "$package_name.tar.xz.sha256.base64" ]
 then
+	echo "Got the file"
 	if [ -e sign_in.crt ]
 	then	
-		openssl verify -verbose -CAfile /root/ca.crt sign_in.crt
+		openssl verify -verbose -CAfile /root/cer/ca.crt sign_in.crt
 		if [ $? -eq 0 ]
 		then
 			echo "Successfully autheticated the certificate"
@@ -41,7 +42,6 @@ then
 			fi
 		else
 			echo "Cannot authenticate Sign in certificate"
-			exit -1
 		fi		
 	else
 		echo "Failed to find certificate"
@@ -49,5 +49,4 @@ then
 	fi
 else
 	echo "Package [ $package_name.tar.xz ] could not be found"
-	exit -1
 fi				

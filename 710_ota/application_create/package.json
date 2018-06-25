@@ -2,6 +2,6 @@
     "type": "application",
     "package_name": "main_1",
     "action": "update",
-    "path": "/home/naeem/Desktop/Whizz/OTA/710/test/application_create/main",
+    "path": "/root/joule_applications/main",
     "script_name": "main_runner_script_1"
 }
