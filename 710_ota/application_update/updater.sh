@@ -15,10 +15,10 @@ then
 		then
 			umount /mnt 2> /dev/null
 			mount -o loop modules.img /mnt
-			if [ $? -eq 0]
+			if [ $? -eq 0 ]
 			then				
 				cp -rf /mnt/$version /lib/modules/
-				if [$? -eq 0]
+				if [ $? -eq 0 ]
 				then
 					if [  -e "/root/failed" ];
 					then
@@ -39,8 +39,12 @@ then
 					umount /mnt
 					echo "Successfully copied new Image"
 					ret=$SUCESS
+					reboot
 				else
 					echo "Could not copy Kernel modules from /mnt"
+					mount -o remount,rw /boot
+					mount -o remount,rw /lib/modules
+					umount /mnt
 					ret=$ERROR
 				fi		
 			else
@@ -52,12 +56,12 @@ then
 			fi				
 		else
 			ret=$ERROR
-			echo "Cannot remount /boot"			
+			echo "Cannot remount /boot or /lib/modules"			
 		fi
 		## at bootup check version of kernel for upgrade status
 		#gawk -i inplace -F" " -vOFS=" "  '$1=="check_version"{$2=$version}1;' ~/.bashrc		
 	else
-		echo "missing uImage"
+		echo "missing zImage"
 		ret=$ERROR
 	fi
 elif [ "$type" = "package" ]
