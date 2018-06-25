@@ -1,7 +1,7 @@
 {
     "type": "application",
-    "package_name": "main_1",
+    "package_name": "main",
     "action": "update",
     "path": "/root/joule_applications/main",
-    "script_name": "main_runner_script_1"
+    "script_name": "main_runner_script"
 }
