@@ -15,10 +15,10 @@ then
 		then
 			umount /mnt 2> /dev/null
 			mount -o loop modules.img /mnt
-			if [ $? -eq 0]
+			if [ $? -eq 0 ]
 			then				
 				cp -rf /mnt/$version /lib/modules/
-				if [$? -eq 0]
+				if [ $? -eq 0 ]
 				then
 					if [  -e "/root/failed" ];
 					then
