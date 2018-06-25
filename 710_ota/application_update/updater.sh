@@ -31,6 +31,7 @@ then
 						cp -f ./zImage /boot/
 						cp -f /boot/s5p4418-artik530-raptor-rev03.dtb /boot/s5p4418-artik530-raptor-rev03_1.dtb
 						cp s5p4418-artik530-raptor-rev03.dtb /boot/
+						touch /root/new
 						sync
 					fi
 					echo "Remounting /boot Read only"
