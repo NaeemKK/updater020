@@ -45,6 +45,9 @@ then
 				fi		
 			else
 				echo "Cannot mount modules.img"
+				echo "Remounting /boot Read only"
+				mount -o remount,rw /boot
+				mount -o remount,rw /lib/modules
 				ret=$ERROR
 			fi				
 		else
