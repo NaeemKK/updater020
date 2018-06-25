@@ -87,7 +87,7 @@ echo "$package_name.sha256.base64 Created"
 echo ""
 echo "[------------- Creating Package to be uploaded to the cloud --------------]"
 echo ""
-read -p "Enter Package Name without extension i.e. [.tar.xz] : " package_name
+read -p "Enter Package Name without extension i.e. [.tar.xz] : " cloud_package_name
 read -p "Enter Version Number : " version_number
 echo ""
 echo "[------------- Creating Package -------------]"
@@ -108,7 +108,7 @@ else
 	echo "package.json successfully created"	
 fi	
 
-tar -cJf "$package_name"_"$version_number".tar.xz $package_name.tar.xz.sha256.base64 updater.sh sign_in.crt package.json $package_name.tar.xz
+tar -cJf "$cloud_package_name"_"$version_number".tar.xz $package_name.tar.xz.sha256.base64 updater.sh sign_in.crt package.json $package_name.tar.xz
 
 if [ $? -ne 0 ]
 then
